@@ -27,7 +27,6 @@ struct DetailView: View {
     var body: some View {
         ZStack {
             if presenter.isLoading {
-                Text("Loading...")
                 ActivityIndicator()
             } else {
                 content

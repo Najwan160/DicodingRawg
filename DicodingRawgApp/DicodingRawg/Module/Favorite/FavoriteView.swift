@@ -14,21 +14,26 @@ struct FavoriteView: View {
     @ObservedObject var presenter: FavoritePresenter<
         FavoritesEntity,
         FavoriteInteractor<
-        [FavoritesEntity],
+            [FavoritesEntity],
             GameRepository<
-            LocalsDataSource,
-            RemotesDataSource,
-            Games.Transformer>>>
+                LocalsDataSource,
+                RemotesDataSource,
+                Games.Transformer>>>
     var body: some View {
         NavigationView {
             ZStack {
-                if presenter.favorite.isEmpty {
-                    Text("You dont Have Any Favorite")
-                } else {
-                    List {
-                        ForEach(presenter.favorite) { favorites in
-                            linkBuilder(gameId: favorites.gameId, name: favorites.title, image: favorites.image, rating: favorites.rating, released: favorites.released) {
-                                FavoriteItem(backroundImage: favorites.image, released: favorites.released, rating: favorites.rating, name: favorites.title)
+                if presenter.isLoading {
+                    ActivityIndicator()
+                }
+                if presenter.isLoading == false {
+                    if presenter.favorite.isEmpty {
+                        Text("You dont Have Any Favorite")
+                    } else {
+                        List {
+                            ForEach(presenter.favorite) { favorites in
+                                linkBuilder(gameId: favorites.gameId, name: favorites.title, image: favorites.image, rating: favorites.rating, released: favorites.released) {
+                                    FavoriteItem(backroundImage: favorites.image, released: favorites.released, rating: favorites.rating, name: favorites.title)
+                                }
                             }
                         }
                     }
@@ -76,7 +81,7 @@ extension FavoriteView {
     ) -> some View {
         NavigationLink(
             destination: FavoriteRouter().makeDetailView(for: GameListModel(gameId: gameId, name: name,
-            released: released, backgroundImage: image, rating: rating))
+                                                                            released: released, backgroundImage: image, rating: rating))
         ) { content() }
     }
 }

@@ -22,26 +22,25 @@ struct SearchView: View {
     @State var text = ""
     var body: some View {
         NavigationView {
-            VStack {
-                TextField("search", text: $text, onCommit: {
-                    presenter.getSearch(query: text)
-                })
-                .padding(7)
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding()
+            ZStack {
                 if presenter.isLoading {
-                    Text("Loading")
                     ActivityIndicator()
-                } else {
+                }
+                VStack {
+                    TextField("search", text: $text, onCommit: {
+                        presenter.getSearch(query: text)
+                    })
+                    .padding(7)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .padding()
                     List(presenter.lists) { game in
                         linkBuilder(for: game) {
                             Item(games: game)
                         }
                     }
                 }
-            }
-            .navigationBarTitle("Search", displayMode: .inline)
+            }.navigationBarTitle("Search", displayMode: .inline)
         }
     }
 }

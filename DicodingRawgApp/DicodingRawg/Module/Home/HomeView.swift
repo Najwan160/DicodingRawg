@@ -23,7 +23,6 @@ struct HomeView: View {
         NavigationView {
             ZStack {
                 if presenter.isLoading {
-                    Text("Loading")
                     ActivityIndicator()
                 } else {
                     List(presenter.list) { game in
